@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1504283313 source:c:\users\monica\desktop\ed2\seleção\data.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"data.h"
+
+1504283367 c:\users\monica\desktop\ed2\seleção\data.h
+
+1504283584 source:c:\users\monica\desktop\ed2\seleção\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"data.h"
+
