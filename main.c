@@ -7,17 +7,27 @@ int main()
 {
     Data* jubileu = createData(2492385, "Jubileu");
     Data* jubara = createData(877680, "Seu Jubara");
-    //Data* fulano = createData(76247, "Fulaninho de Souza Delgado");
+    Data* fulano = createData(76247, "Fulaninho de Souza Delgado");
 
-    saveData("registers.data", jubileu);
-    saveData("registers.data", jubara);
-    //saveData("registers.data", fulano);
+    FILE* fileWrite = fopen("registers.data", "wb");
+    if (fileWrite == NULL) return 1;
+
+    saveData(fileWrite, jubileu);
+    saveData(fileWrite, jubara);
+    saveData(fileWrite, fulano);
+
+    fclose(fileWrite);
 
     free(jubileu);
     free(jubara);
-    //free(fulano);
+    free(fulano);
 
-    Data* d1 = loadData("registers.data");
+    FILE* fileRead = fopen("registers.data", "rb");
+    if (fileRead == NULL) return 1;
+
+    Data* d1 = loadData(fileRead);
+
+    fclose(fileRead);
 
     printData(d1);
 

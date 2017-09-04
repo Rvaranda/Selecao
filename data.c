@@ -15,35 +15,26 @@ Data* createData(unsigned int cod, const char* name)
     return data;
 }
 
-Data* loadData(const char* filepath)
+Data* loadData(FILE* file)
 {
-    FILE* file = fopen(filepath, "rb");
-    if (file != NULL)
-    {
-        Data* data = (Data*)malloc(sizeof(Data));
-        if (data != NULL)
-        {
-            fread(data, sizeof(Data), 1, file);
-        }
 
-        fclose(file);
-        return data;
+    Data* data = (Data*)malloc(sizeof(Data));
+
+    if (data != NULL)
+    {
+        fread(&data->cod, sizeof(unsigned int), 1, file);
+        fread(data->name, sizeof(char), sizeof(data->name), file);
     }
 
-    return NULL;
+    return data;
 }
 
-void saveData(const char* filepath, Data* data)
+void saveData(FILE* file, Data* data)
 {
-    FILE* file = fopen(filepath, "wb");
-    if (file != NULL)
+    if (data != NULL)
     {
-        if (data != NULL)
-        {
-            fwrite(data, sizeof(Data), 1, file);
-        }
-
-        fclose(file);
+        fwrite(&data->cod, sizeof(unsigned int), 1, file);
+        fwrite(data->name, sizeof(char), sizeof(data->name), file);
     }
 }
 
