@@ -24,6 +24,8 @@ Data* loadData(FILE* file)
     {
         fread(&data->cod, sizeof(unsigned int), 1, file);
         fread(data->name, sizeof(char), sizeof(data->name), file);
+
+        if (feof(file)) return NULL;
     }
 
     return data;
@@ -46,4 +48,5 @@ void printData(Data* data)
         printf("Name: %s\n", data->name);
         printf("--------------------\n");
     }
+    else printf("NULL Data\n");
 }
