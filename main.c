@@ -17,6 +17,7 @@ int main()
 
 	int i;
     int partNum = 1;
+    int isOver = 0;
     Data* memory[MEMSIZE];
     Data* frozed[MEMSIZE];
     Data* smallest = NULL;
@@ -30,39 +31,44 @@ int main()
     for (i = 0; i < MEMSIZE; i++)
     {
     	memory[i] = loadData(file);
-        //printf("debug\n");
     }
 
     while (!isEmpty(memory))
     {
-        //printf("debug\n"); 2 vezes
         char s[30];
         setPartFileName(s, "part", partNum);
 
     	FILE* part = fopen(strcat(s, ".data"), "wb");
     	if (part == NULL) return 1;
 
-    	while (!isFull(frozed))
+    	while (!isFull(frozed) && !isEmpty(memory))
     	{
-            //printf("debug%d\n", partNum);
 	    	smallest = getSmallest(memory, frozed);
-            //if (partNum >= 2) printf("debug\n");
 
-	    	saveData(part, smallest);
+	    	if (smallest != NULL) saveData(part, smallest);
 
 	    	for (i = 0; i < MEMSIZE; i++)
 	    	{
 	    		if (memory[i] == smallest)
 	    		{
-                    if (partNum >= 2) printf("debug%d\n", i);
 	    			Data* temp = loadData(file);
-	    			if (temp->cod < smallest->cod)
+	    			if (temp != NULL)
 	    			{
-	    				if (frozed[i] == NULL) frozed[i] = temp;
+		    			if (temp->cod < smallest->cod)
+		    			{
+		    				if (frozed[i] == NULL) frozed[i] = temp;
+		    			}
 	    			}
 
 	    			memory[i] = temp;
-                    break;
+	    		}
+	    	}
+
+	    	if (smallest == NULL)
+	    	{
+	    		if (!isFull(memory))
+	    		{
+	    			break;
 	    		}
 	    	}
     	}
@@ -72,10 +78,10 @@ int main()
         partNum++;
     }
 
-    printf("Acho que deu tudo certo, brou. Confere ae.\n");
+    printf("Processo concluido. Particoes criadas e ordenadas.\n");
+    fclose(file);
 
     return 0;
-    //printf("debug\n");
 }
 
 int isFull(Data* data[])
@@ -137,64 +143,3 @@ Data* getSmallest(Data* data[], Data* frozed[])
 
 	return smallest;
 }
-
-/*Data* jubileu = createData(2492385, "Jubileu");
-    Data* jubara = createData(877680, "Seu Jubara");
-    Data* fulano = createData(76247, "Fulaninho de Souza Delgado");
-
-    FILE* fileWrite = fopen("registers.data", "wb");
-    if (fileWrite == NULL) return 1;
-
-    saveData(fileWrite, jubileu);
-    saveData(fileWrite, jubara);
-    saveData(fileWrite, fulano);
-
-    fclose(fileWrite);
-
-    free(jubileu);
-    free(jubara);
-    free(fulano);
-
-    FILE* fileRead = fopen("registers.data", "rb");
-    if (fileRead == NULL) return 1;
-
-    Data* d1 = loadData(fileRead);
-
-    fclose(fileRead);
-
-    printData(d1);*/
-
-    /*FILE* file = fopen("registers.data", "wb");
-    if (file == NULL) return 1;
-
-    printf("Start!\n");
-
-    int i;
-    for (i = 0; i < 20; i++)
-    {
-        unsigned int cod = rand() % 101;
-        char name[50];
-
-        printf("i = %d\n", i);
-        scanf("%s", name);
-
-        Data* data = createData(cod, name);
-        saveData(file, data);
-        printData(data);
-        free(data);
-    }
-
-    fclose(file);*/
-
-    /*FILE* file = fopen("registers.data", "rb");
-    if (file == NULL) return 1;
-
-    Data* data = NULL;
-    while ((data = loadData(file)) != NULL)
-    {
-        printData(data);
-        free(data);
-        data = NULL;
-    }
-
-    fclose(file);*/
